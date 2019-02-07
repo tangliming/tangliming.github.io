@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="gorm 数据库,">
 
 
 
@@ -79,13 +79,18 @@
 
 
 
-<meta property="og:type" content="website">
-<meta property="og:title" content="唐黎明的博客">
-<meta property="og:url" content="http://tangliming.com/index.html">
+<meta name="description" content="gorm的多对多操作，真是一大堆的坑，官网的文档说得很模糊，也没有完整的例子， 中文的网络资源对这部分的解释很少。作为新手的我，在这上面卡了很长一段时时间，经过艰苦的摸索，终于爬坑成功。在这里记录下心得。 1.多对多关系的定义 123456789101112type Student struct &amp;#123;	gorm.Model	Code string	Name string	Books []B">
+<meta name="keywords" content="gorm 数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gorm多对多示例">
+<meta property="og:url" content="http://tangliming.com/2019/02/07/gorm多对多示例/index.html">
 <meta property="og:site_name" content="唐黎明的博客">
+<meta property="og:description" content="gorm的多对多操作，真是一大堆的坑，官网的文档说得很模糊，也没有完整的例子， 中文的网络资源对这部分的解释很少。作为新手的我，在这上面卡了很长一段时时间，经过艰苦的摸索，终于爬坑成功。在这里记录下心得。 1.多对多关系的定义 123456789101112type Student struct &amp;#123;	gorm.Model	Code string	Name string	Books []B">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-02-07T10:42:08.536Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="唐黎明的博客">
+<meta name="twitter:title" content="gorm多对多示例">
+<meta name="twitter:description" content="gorm的多对多操作，真是一大堆的坑，官网的文档说得很模糊，也没有完整的例子， 中文的网络资源对这部分的解释很少。作为新手的我，在这上面卡了很长一段时时间，经过艰苦的摸索，终于爬坑成功。在这里记录下心得。 1.多对多关系的定义 123456789101112type Student struct &amp;#123;	gorm.Model	Code string	Name string	Books []B">
 
 
 
@@ -115,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://tangliming.com/">
+  <link rel="canonical" href="http://tangliming.com/2019/02/07/gorm多对多示例/">
 
 
 
 
 
-  <title>唐黎明的博客</title>
+  <title>gorm多对多示例 | 唐黎明的博客</title>
   
 
 
@@ -150,8 +155,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -224,9 +228,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -256,9 +260,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/02/07/gorm多对多示例/" itemprop="url">gorm多对多示例</a></h1>
+          <h1 class="post-title" itemprop="name headline">gorm多对多示例</h1>
         
 
         <div class="post-meta">
@@ -318,9 +320,7 @@
       
 
       
-        
-          
-            <p>gorm的多对多操作，真是一大堆的坑，官网的文档说得很模糊，也没有完整的例子， 中文的网络资源对这部分的解释很少。作为新手的我，在这上面卡了很长一段时时间，经过艰苦的摸索，终于爬坑成功。在这里记录下心得。</p>
+        <p>gorm的多对多操作，真是一大堆的坑，官网的文档说得很模糊，也没有完整的例子， 中文的网络资源对这部分的解释很少。作为新手的我，在这上面卡了很长一段时时间，经过艰苦的摸索，终于爬坑成功。在这里记录下心得。</p>
 <p>1.多对多关系的定义</p>
 <figure class="highlight elm"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> <span class="type">Student</span> struct &#123;</span><br><span class="line">	gorm.<span class="type">Model</span></span><br><span class="line">	<span class="type">Code</span> string</span><br><span class="line">	<span class="type">Name</span> string</span><br><span class="line">	<span class="type">Books</span> []<span class="type">Book</span> `gorm:"many2many:student_books;"`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> <span class="type">Book</span> struct &#123;</span><br><span class="line">	gorm.<span class="type">Model</span></span><br><span class="line">	<span class="type">Name</span> string</span><br><span class="line">	<span class="type">Students</span> []<span class="type">Student</span> `gorm:"many2many:student_books;"`</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>切记<code>gorm:</code>跟<code>many2many</code>之间<strong>不能有空格</strong>，否则联结表不会生成。定义了模型以后，只要调用<code>db.AutoMigrate(&amp;Student{}, &amp;Book{})</code>会生成三张表。<br><figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; show tables;</span><br><span class="line"><span class="code">+-----------------------------------+</span></span><br><span class="line">| Tables<span class="emphasis">_in_</span>gorm                    |</span><br><span class="line"><span class="code">+-----------------------------------+</span></span><br><span class="line">| books                             |</span><br><span class="line">| student<span class="emphasis">_books                     |</span></span><br><span class="line"><span class="emphasis">| students                          |</span></span><br><span class="line"><span class="emphasis">+-----------------------------------+</span></span><br></pre></td></tr></table></figure></p>
@@ -341,8 +341,6 @@
 <p>删除某个关系<br><figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">db</span><span class="selector-class">.Model</span>(&amp;bookQ)<span class="selector-class">.Association</span>(<span class="string">"Students"</span>)<span class="selector-class">.Delete</span>(student3)</span><br></pre></td></tr></table></figure></p>
 <p>完整的代码如下：<br><figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br></pre></td><td class="code"><pre><span class="line">package main</span><br><span class="line"></span><br><span class="line">import (</span><br><span class="line">	<span class="string">"github.com/jinzhu/gorm"</span></span><br><span class="line">	_ <span class="string">"github.com/jinzhu/gorm/dialects/mysql"</span></span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Student struct &#123;</span><br><span class="line">	gorm.Model</span><br><span class="line">	Code <span class="built_in">string</span></span><br><span class="line">	Name <span class="built_in">string</span></span><br><span class="line">	Books []Book `gorm:<span class="string">"many2many:student_books;"</span>`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> Book struct &#123;</span><br><span class="line">	gorm.Model</span><br><span class="line">	Name <span class="built_in">string</span></span><br><span class="line">	Students []Student `gorm:<span class="string">"many2many:student_books;"</span>`</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func main() &#123;</span><br><span class="line">	<span class="keyword">db</span> := Connect()</span><br><span class="line">	defer <span class="keyword">db</span>.<span class="keyword">Close</span>()</span><br><span class="line">	<span class="keyword">db</span>.LogMode(true)</span><br><span class="line">	purgeDB(<span class="keyword">db</span>)</span><br><span class="line">	<span class="keyword">db</span>.AutoMigrate(&amp;Student&#123;&#125;, &amp;Book&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	student1 := Student&#123;Code: <span class="string">"000001"</span>, Name: <span class="string">"张三"</span>&#125;</span><br><span class="line">	student2 := Student&#123;Code: <span class="string">"000002"</span>, Name: <span class="string">"李四"</span>&#125;</span><br><span class="line">	student3 := Student&#123;Code: <span class="string">"000003"</span>, Name: <span class="string">"王五"</span> &#125;</span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Save</span>(&amp;student1)</span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Save</span>(&amp;student2)</span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Save</span>(&amp;student3)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> studentlist []Student</span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Table</span>(<span class="string">"students"</span>).Where(<span class="string">"id = 1"</span>).Or(<span class="string">"id = 2"</span>).Find(&amp;studentlist)</span><br><span class="line"></span><br><span class="line">	book1 := Book&#123;Name: <span class="string">"笑傲江湖"</span>, Students: studentlist&#125;</span><br><span class="line">	book2 := Book&#123;</span><br><span class="line">		Name: <span class="string">"神雕侠侣"</span>, Students: []Student &#123;</span><br><span class="line">			student3,</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Save</span>(&amp;book1)</span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Save</span>(&amp;book2)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> student Student</span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Table</span>(<span class="string">"students"</span>).Where(<span class="string">"id = 1"</span>).First(&amp;student)</span><br><span class="line">	book := []Book&#123;&#125;</span><br><span class="line">	<span class="keyword">db</span>.Preload(<span class="string">"Students"</span>).Find(&amp;book)</span><br><span class="line">	fmt.Println(book)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">db</span>.Model(&amp;student).Related(&amp;book, <span class="string">"Books"</span>)</span><br><span class="line">	fmt.Println(book)</span><br><span class="line">	<span class="keyword">db</span>.Model(&amp;student).Association(<span class="string">"Books"</span>).Find(&amp;book)</span><br><span class="line">	fmt.Println(book)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> bookQ Book</span><br><span class="line">	<span class="keyword">db</span>.<span class="keyword">Table</span>(<span class="string">"books"</span>).Where(<span class="string">"id = 1"</span>).First(&amp;bookQ)</span><br><span class="line">	<span class="keyword">db</span>.Model(&amp;bookQ).Association(<span class="string">"Students"</span>).Find(&amp;studentlist)</span><br><span class="line">	fmt.Println(studentlist)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">db</span>.Model(&amp;bookQ).Association(<span class="string">"Students"</span>).<span class="keyword">Append</span>(student3)</span><br><span class="line">	<span class="keyword">db</span>.Model(&amp;bookQ).Association(<span class="string">"Students"</span>).<span class="keyword">Append</span>(Student&#123;Code: <span class="string">"000005"</span>, Name: <span class="string">"西门吹雪"</span>&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">db</span>.Model(&amp;bookQ).Association(<span class="string">"Students"</span>).Delete(student3)</span><br><span class="line">	<span class="keyword">db</span>.Model(&amp;bookQ).Association(<span class="string">"Students"</span>).<span class="keyword">Clear</span>()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">func purgeDB(<span class="keyword">db</span> *gorm.<span class="keyword">DB</span>) &#123;</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">db</span>.HasTable(&amp;Student&#123;&#125;) &#123;</span><br><span class="line">		<span class="keyword">db</span>.DropTable(&amp;Student&#123;&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> <span class="keyword">db</span>.HasTable(&amp;Book&#123;&#125;) &#123;</span><br><span class="line">		<span class="keyword">db</span>.DropTable(&amp;Book&#123;&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
-          
-        
       
     </div>
     
@@ -357,289 +355,36 @@
 
     <footer class="post-footer">
       
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://tangliming.com/2017/11/24/时空泡泡/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="唐黎明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐黎明的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/24/时空泡泡/" itemprop="url">时空泡泡</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-24T22:32:55+08:00">
-                2017-11-24
-              </time>
-            
-
-            
-
-            
-          </span>
-
+        <div class="post-tags">
           
-
+            <a href="/tags/gorm-数据库/" rel="tag"># gorm 数据库</a>
           
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/24/时空泡泡/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/24/时空泡泡/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>昨天晚上做了一个很有意思的梦，梦到几个同事和朋友，无意间闯入到了一个时空泡泡的房间里，为什么我觉得是时空泡泡呢。因为这个空间是有限的，但是你向前走一段以后会发现自己又回到了起点，不管是往哪个方向。而这个时空里的时间跟外面的时间是不一样的，里面的时间不管过了多久，对于外面来说都是同一个时间，也就是说只要一直在这个空间里，你就实现了永生。这个空间里的任何东西，如果被使用完就回马上重新出现一个新的。比如，一个蛋糕，吃完以后，马上一个新的蛋糕就出现了，还在原来的位置，好像你从来没有吃过他。人在里面也是，就算死掉也可以满血复活。</p>
-<p>在梦里，跟几个同事和朋友一商量，觉得只是世界上最大的商机了，只要进到这个地方，就可以永生.</p>
-<p>所以从这里出来以后，墙上有一个半透明的膜，可以从这里穿过回到原来的时空。大家就研究如何让这个泡泡更大一点，这样在里面的活动空间更大，最好能有一个小镇那么大。大家决定在日本的一个火山旁边进行建设商用的时空泡泡，开推土机推开火山下的土壤，准备修一个小房子，选择火山也是为了让火山的力量更容易的创造这个时空奇迹。</p>
-<p>商业进行的很成功，广告，新闻，整个世界都被这个发现震动了。很多人慕名而来，体会这个包着火山的时空泡泡，在里面体验永生和复活。随着参与的人越来越多，小镇也建起来了。</p>
-<p>到后来有一对年轻的情侣到火山小屋来体验，他们想好的体验方式是在火山口灌满原油，然后火山爆发。原油燃烧喷射，最后一切都毁掉了。但是当原油罐满以后，突然时空泡泡中的复活机制消失了，也就是火山随时都会爆发，但是如果这个时候死掉是无法复活的。</p>
-<p>大家都立即往火山下的小镇跑去，接着我就醒了。不知道我是不是从《三体》中得到的灵感，时空泡泡很像那个四维碎片和最后的小宇宙。而透过膜回到原来的世界又有点像《神奇女侠》里的情节。真是一个有意思的梦。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
       
 
       
       
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
       
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://tangliming.com/2017/11/21/一个不错的免费图床/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="唐黎明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐黎明的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/21/一个不错的免费图床/" itemprop="url">一个不错的免费图床</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
             
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-21T20:08:43+08:00">
-                2017-11-21
-              </time>
+              <a href="/2017/11/24/时空泡泡/" rel="next" title="时空泡泡">
+                <i class="fa fa-chevron-left"></i> 时空泡泡
+              </a>
             
+          </div>
 
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
             
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/21/一个不错的免费图床/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/21/一个不错的免费图床/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
+          </div>
         </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
       
 
       
-        
-          
-            <p>目前这个博客只是写写文字，而图片的显示还无法做到，之前在搭建的过程中就听说了很多人使用<a href="https://www.qiniu.com" target="_blank" rel="noopener">七牛</a>做为图床，但是这个免费是有限制的，只有10G的免费流量。所以一直想找一个免费的使用。</p>
-<p>今天在网上找了一下，发现一个不错的免费图床——<a href="http://img.so" target="_blank" rel="noopener">img.so</a>，操作超级简单，不注册都可以使用。</p>
-<p>以下图片就来自于这个图床。</p>
-<p><img src="https://us1.myximage.com/2017/11/21/8c241f4ba4b090e5f5a219f87ac5c5a7.jpg" alt="网站首页"></p>
-<p>要插入图片，在注册账号以后，只要三步就可以了：</p>
-<ol>
-<li>上传照片</li>
-<li>点击“嵌入代码”，拷贝图片链接</li>
-<li>嵌入到MarkDown中</li>
-</ol>
-<p>目前看来除了速度有点慢之外，好像其他还可以，先暂时用着。</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
       
     </footer>
   </div>
@@ -649,143 +394,11 @@
   </article>
 
 
-    
-      
 
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://tangliming.com/2017/11/12/我的博客开张/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="唐黎明">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="唐黎明的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/11/12/我的博客开张/" itemprop="url">我的博客开张</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-11-12T22:50:17+08:00">
-                2017-11-12
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2017/11/12/我的博客开张/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2017/11/12/我的博客开张/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>在接触互联网二十多年以后，我终于迈出了这一步，在网络中有了一席之地。整整二十年，互联网已经从一个荒寂的不毛之地变成了繁华的花花世界，我只是默默的看着，看着他们起了高楼，看着他们把楼盖得更高。错过了一个又一个的机会，除了年纪渐长，从未在这个世界占有一角。</p>
-<p>2017年算是我人生中一个比较重要的年份，这一年我想通了很多事情，迷茫这个词对我来说似乎开始渐渐远去，虽然对于未知的未来我仍然充满了恐惧，但是这恐惧的背后似乎有了某种力量的支撑，让我可以静下心来做一些事情。</p>
-<p>很幸运，我在年中的时候申请到了这个域名，所以在今年的计划中加入了建立一个个人网站的任务，现在这个任务终于开始了，虽然这个博客还很简陋，还有很多东西需要去增加和修改，但是如同一个网上的家，虽然还是个帐篷，但是已经足够我安身。</p>
-<p>这个博客，我会用来记录我一些细碎的知识，经历或是感悟，希望能从这个点开始，改变我，也改变我的未来。</p>
-
-          
-        
+    <div class="post-spread">
       
     </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </div>
-  
-  
-  
-  </article>
-
-
-    
-  </section>
-
-  
 
 
           </div>
@@ -793,6 +406,20 @@
 
 
           
+
+  
+    <div class="comments" id="comments">
+      <div id="disqus_thread">
+        <noscript>
+          Please enable JavaScript to view the
+          <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+        </noscript>
+      </div>
+    </div>
+
+  
+
+
 
         </div>
         
@@ -1007,6 +634,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1024,6 +655,18 @@
       <script id="dsq-count-scr" src="https://.disqus.com/count.js" async></script>
     
 
+    
+      <script type="text/javascript">
+        var disqus_config = function () {
+          this.page.url = 'http://tangliming.com/2019/02/07/gorm多对多示例/';
+          this.page.identifier = '2019/02/07/gorm多对多示例/';
+          this.page.title = 'gorm多对多示例';
+        };
+        var d = document, s = d.createElement('script');
+        s.src = 'https://.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', '' + +new Date());
+        (d.head || d.body).appendChild(s);
+      </script>
     
 
   
